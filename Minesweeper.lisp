@@ -50,7 +50,7 @@
         (setf (aref grid (car coords) (cadr coords)) #\X)
         nil)
       (setf (aref grid (car coords) (cadr coords))
-            (elt " 123456789"(count-nearby-mines minefield coords))))))
+            (elt "0123456789"(count-nearby-mines minefield coords))))))
  
 (defun mark (minefield coords)
   (with-slots (mines grid) minefield
@@ -67,7 +67,7 @@
       (= num-uncleared (hash-table-count mines)))))
  
 (defun play-game ()
-  (let ((minefield (make-minefield 8 8 8))) ;make-minefield row column mines
+  (let ((minefield (make-minefield 8 8 8))) ;make-minefield col row mines
     (format t "Greetings player, there are ~a mines.~%"
             (hash-table-count (slot-value minefield 'mines)))
     (loop
