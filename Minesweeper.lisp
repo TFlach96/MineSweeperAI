@@ -42,15 +42,19 @@
  
 (defun clear (minefield coords)
   (with-slots (mines grid) minefield
-    (if (gethash coords mines)
-      (progn
-        (format t "MINE! You lose.~%")
-        (dolist (mine-coords (mine-list minefield))
-          (setf (aref grid (car mine-coords) (cadr mine-coords)) #\x))
-        (setf (aref grid (car coords) (cadr coords)) #\X)
-        nil)
-      (setf (aref grid (car coords) (cadr coords))
-            (elt "0123456789"(count-nearby-mines minefield coords))))))
+    (if (equalp (aref grid (car coords) (cadr coords)) #\.) ;If coords have already been cleared, stop the call.
+      (if (gethash coords mines)
+        (progn
+          (format t "MINE! You lose.~%")
+          (dolist (mine-coords (mine-list minefield))
+            (setf (aref grid (car mine-coords) (cadr mine-coords)) #\x))
+          (setf (aref grid (car coords) (cadr coords)) #\X)
+          nil)
+        (let ((x (count-nearby-mines minefield coords)))
+          (setf (aref grid (car coords) (cadr coords))
+              (elt "0123456789" x))
+          ))
+      (setf (aref grid (car coords) (cadr coords)) (aref grid (car coords) (cadr coords)))))) ;ignore this space but don't terminate
  
 (defun mark (minefield coords)
   (with-slots (mines grid) minefield
