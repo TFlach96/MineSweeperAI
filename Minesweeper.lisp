@@ -1,5 +1,5 @@
+;source code from
 ;https://rosettacode.org/wiki/Minesweeper_game
-;source
 (defclass minefield ()
   ((mines :initform (make-hash-table :test #'equal))
    (width :initarg :width)
@@ -31,6 +31,25 @@
  
 (defun mine-list (minefield)
   (loop for key being the hash-keys of (slot-value minefield 'mines) collect key))
+
+(defun adjacent-clear (minefield coords)
+  (with-slots (width height grid) minefield
+    (dotimes (y height)
+      (dotimes (x width)
+        (let ((adjCoords (list x y))) 
+          (when ;if the x and y loop are withing 1 space of the coordinates
+            (and
+              (> 2 (abs (- (car coords) x)))
+              (> 2 (abs (- (cadr coords) y)))
+            )
+              (clear minefield adjCoords) ;clear the adjacent location
+          )
+        )
+      )
+    )
+    (setf (aref grid (car coords) (cadr coords)) (aref grid (car coords) (cadr coords)))
+  )
+)
  
 (defun count-nearby-mines (minefield coords)
   (length (remove-if-not
@@ -42,7 +61,7 @@
  
 (defun clear (minefield coords)
   (with-slots (mines grid) minefield
-    (if (equalp (aref grid (car coords) (cadr coords)) #\.) ;If coords have already been cleared, stop the call.
+    (if (equalp (aref grid (car coords) (cadr coords)) #\.) ;If coords have already been cleared, continue.
       (if (gethash coords mines)
         (progn
           (format t "MINE! You lose.~%")
@@ -50,10 +69,13 @@
             (setf (aref grid (car mine-coords) (cadr mine-coords)) #\x))
           (setf (aref grid (car coords) (cadr coords)) #\X)
           nil)
-        (let ((x (count-nearby-mines minefield coords)))
+        (let ((x (count-nearby-mines minefield coords))) ;store the number of adjacent mines in x
           (setf (aref grid (car coords) (cadr coords))
               (elt "0123456789" x))
-          ))
+          (if (eql x 0) ;if no mines clear adjacent areas recursively.
+            (adjacent-clear minefield coords) 
+            (setf (aref grid (car coords) (cadr coords)) (aref grid (car coords) (cadr coords))))))
+      ;else ignore and set to itself
       (setf (aref grid (car coords) (cadr coords)) (aref grid (car coords) (cadr coords)))))) ;ignore this space but don't terminate
  
 (defun mark (minefield coords)
