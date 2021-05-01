@@ -61,7 +61,7 @@
  
 (defun clear (minefield coords)
   (with-slots (mines grid) minefield
-    (if (equalp (aref grid (car coords) (cadr coords)) #\.) ;If coords have already been cleared, continue.
+    (if (or (equalp (aref grid (car coords) (cadr coords)) #\.) (equalp (aref grid (car coords) (cadr coords)) #\?)) ;If coords have not already been cleared or is marked, continue.
       (if (gethash coords mines)
         (progn
           (format t "MINE! You lose.~%")
