@@ -117,7 +117,9 @@ t
 (defun return-false ()
 nil
   )
-
+(defparameter *direction* '(3 3)
+:initial-contents '(((-1 -1) (-1 0) (-1 1)) ((0 -1) (0 0) (0 1)) ((1 -1) (1 0) (1 1)))
+  )
 (defparameter *col* 8)
 (defparameter *row* 8)
 (defparameter *mines* 8)
@@ -125,11 +127,13 @@ nil
 (defvar edgetiles '())
 (defvar history '())
 (defvar action '())
+(defvar remaintiles nil)
+(defvar remainmines nil)
 
 (defun inbounds (col row)
   (when (>= col 0)
     (when (< col *col*)
-      (when (>= row 0)
+      (when (>= row  0)
         (when (< row *row*)
           (return-true)
           )
@@ -138,10 +142,23 @@ nil
     )
   (return-false)
   )
+(defun calcminestat)
+(defun safesttile)
+(defun bestguess)
+(defun checkboundtiles (minefield coords)
+
+
+  )
                                         ;copy game, make subfunctions for DFS
 (defun minesweeper-dfsai()
                        
-                        (let ((minefield (make-minefield 8 8 8)) (moves 1) (firstmove (list (random *col*) (random *row*)))) ;make-minefield col row mines, moves for ai tracking, firstmove for ai
+  (let ((minefield (make-minefield *col* *row* *mines*)) ;make-minefield col row mines
+        (moves 1) ; what move the ai is on
+        (firstmove (list (random *col*) (random *row*))) ;firstmove of minesweeper
+        (remainingtiles (-(* *col* *row*)1) )
+        (remainingmines *mines*)
+
+        )
                           (loop
                            (print-field minefield)
                             (when ( = moves 1)
