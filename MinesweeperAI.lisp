@@ -111,25 +111,53 @@
         (when (win-p minefield)
           (format t "Congratulations, you've won!")
           (return-from play-game T))))))
+(defun return-true ()
+t
+  )
+(defun return-false ()
+nil
+  )
 
-
-(defparameter *moves* 1)
 (defparameter *col* 8)
 (defparameter *row* 8)
 (defparameter *mines* 8)
-(defparameter *firstmove* (list (random *col*) (random *row*)))
+(defvar zerotiles '())
+(defvar edgetiles '())
+(defvar history '())
+(defvar action '())
+
+(defun inbounds (col row)
+  (when (>= col 0)
+    (when (< col *col*)
+      (when (>= row 0)
+        (when (< row *row*)
+          (return-true)
+          )
+        )
+      )
+    )
+  (return-false)
+  )
                                         ;copy game, make subfunctions for DFS
 (defun minesweeper-dfsai()
                        
-                        (let ((minefield (make-minefield 8 8 8))) ;make-minefield col row mines
+                        (let ((minefield (make-minefield 8 8 8)) (moves 1) (firstmove (list (random *col*) (random *row*)))) ;make-minefield col row mines, moves for ai tracking, firstmove for ai
                           (loop
                            (print-field minefield)
-                            (if ( = *moves* 1)
-                                (clear minefield *firstmove*)
-                                (incf *moves*)
+                            (when ( = moves 1)
+                              (clear minefield firstmove)
+                              (print firstmove)
+                              (terpri)
+                              
                                 )
-                            (incf *moves*)
-                            )))
+                            (when (>= moves 2)
+                              
+                              )
+                            (incf moves)
+                          
+                                )
+                           
+                            ))
 
 
                                         ;(play-game)
