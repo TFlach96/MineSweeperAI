@@ -6,9 +6,9 @@ import random
 import copy
 from minesweeper import Minesweeper, MinesweeperAI
 
-HEIGHT = 10
-WIDTH = 10
-MINES = 16
+HEIGHT = 8
+WIDTH = 8
+MINES = 8
 population_size = 5
 child = []
 offspring = []
@@ -93,7 +93,7 @@ while True:
             row.append(rect)
         cells.append(row)
 
-    # Solving the corners
+    # Initial Solve
     if initial_solve:
         ai = MinesweeperAI(height=HEIGHT, width=WIDTH, kb=child)
         move = (0, 0)
@@ -152,7 +152,8 @@ while True:
                                 if element in ai.moves_made:
                                     already_made.add(element)
 
-                            # Using set function difference_update() removes the items that exist in both sets
+                            # Using set function difference_update() removes the items that exist in both sets from
+                            # remove_dupes
                             remove_dupes.difference_update(already_made)
                             moveStack = list(remove_dupes)
                         else:
