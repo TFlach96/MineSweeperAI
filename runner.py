@@ -6,15 +6,16 @@ import random
 import copy
 from minesweeper import Minesweeper, MinesweeperAI
 
-HEIGHT = 8
-WIDTH = 8
-MINES = 8
+HEIGHT = 10
+WIDTH = 10
+MINES = 16
 population_size = 5
 child = []
 offspring = []
 generationsCounter = 1
 initial_solve = True
 initial_knowledge = []
+mine_first = True
 
 # Colors
 BLACK = (0, 0, 0)
@@ -97,9 +98,13 @@ while True:
         ai = MinesweeperAI(height=HEIGHT, width=WIDTH, kb=child)
         move = (0, 0)
         if move:
-            if game.is_mine(move):
-                print("mine")
-                ai.add_knowledge(move, 'mine')
+            while mine_first:
+                if game.is_mine(move):
+                    game = Minesweeper(height=HEIGHT, width=WIDTH, mines=MINES)
+                    print("Mine in first box, creating new game.")
+                else:
+                    mine_first = False
+                    break
             else:
                 nearby = game.nearby_mines(move)
                 revealed.add(move)
@@ -192,7 +197,6 @@ while True:
                 else:
                     if move:
                         if game.is_mine(move):
-                            print(move)
                             ai.add_knowledge(move, 'mine')
                             population.append(ai.knowledge)
                             fitness_scores.append(len(ai.knowledge))
@@ -220,29 +224,34 @@ while True:
         # Crossover + Mutation
         offspring = []
         parentSize = len(parent1)
+
+        parent1Mine = []
+        for mc in parent1:
+            if mc[1] == 'mine':
+                parent1Mine.append(mc)
+
+        parent2Mine = []
+        for mc2 in parent2:
+            if mc2[1] == 'mine':
+                parent2Mine.append(mc2)
+
+        # Checking for non dupes and adding
+        for dupes in parent2Mine:
+            if dupes not in parent1Mine:
+                parent1Mine.append(dupes)
+        for contents in parent1Mine:
+            offspring.append(parent1Mine.pop())
+
         for breed in range(0, parentSize):
             if (breed + 1 % 2) != 0:
                 rand = random.randint(0, len(parent1) - 1)
-                if parent1[rand] not in offspring:
-                    offspring.append(parent1.pop(rand))
-                else:
-                    rand = random.randint(0, len(parent1) - 1)
-                    offspring.append(parent1.pop(rand))
+                offspring.append(parent1.pop(rand))
             else:
                 if len(parent2) != 0:
                     rand = random.randint(0, len(parent2) - 1)
-                    if parent2[rand] not in offspring:
-                        offspring.append(parent2.pop(rand))
-                    else:
-                        rand = random.randint(0, len(parent2) - 1)
-                        offspring.append(parent2.pop(rand))
+                    offspring.append(parent2.pop(rand))
                 else:
                     rand = random.randint(0, len(parent1) - 1)
-                    if parent1[rand] not in offspring:
-                        offspring.append(parent1.pop(rand))
-                    else:
-                        rand = random.randint(0, len(parent1) - 1)
-                        offspring.append(parent1.pop(rand))
-        print(len(offspring))
+                    offspring.append(parent1.pop(rand))
         generationsCounter += 1
     pygame.display.flip()
