@@ -146,9 +146,39 @@ nil
 (defun safesttile)
 (defun bestguess)
 (defun checkboundtiles (minefield coords)
-
-
+  (with-slots (grid) minefield
+    (let ((mines 0) (cover-tiles '()) (tile-number (aref grid (car corrds) (card coords))))
+      (dolist (d direction)
+        (let ((adj (list (+ (car d) (car coords)) (+ (cadr d) (cadr coords)))))
+          (when (inbounds adj)
+            (if (equalp (aref grid (car adj) (cadr adj)) #\?) ;if marked tile
+              (incf mines) ;mines incremented
+              (when (and (equalp (aref grid (car adj) (cadr adj)) #\.) (not (visited minefield coords))) ; else if covered and not visited coordinates.
+                (push adj cover-tiles)
+              )
+            )
+          )
+        )
+      )
+      ;Most likely not going to work.
+      (let ((size (length cover-tiles)))
+        (if (= size 0)
+          (return-false)
+          (if (= mines tile-number)
+            (dolist (c cover-tiles)
+              (clear minefield c))
+            (if (= (+ size mines) tile-number)
+              (dolist (c cover-tiles)
+                (mark minefield c)
+              )
+            )
+          )
+        )
+        (return-true)
+      )
+    )
   )
+)
                                         ;copy game, make subfunctions for DFS
 (defun minesweeper-dfsai()
                        
