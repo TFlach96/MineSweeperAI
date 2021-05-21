@@ -6,9 +6,9 @@ import random
 import copy
 from minesweeper import Minesweeper, MinesweeperAI
 
-HEIGHT = 10
-WIDTH = 10
-MINES = 16
+HEIGHT = 8
+WIDTH = 8
+MINES = 8
 population_size = 5
 child = []
 offspring = []
@@ -171,6 +171,7 @@ while True:
                 break
             print('AI #', AINumber + 1)
             child = list(offspring)
+            time.sleep(0.001)
             ai = MinesweeperAI(height=HEIGHT, width=WIDTH, kb=child)
             revealed = set()
             flags = set()
