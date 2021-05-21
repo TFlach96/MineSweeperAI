@@ -1,0 +1,9 @@
+Things I have done for this project
+
+1. I coded the Genetic Algorithm implementation of Minesweeper in Python.
+Specifically lines 96-256 in runner.py
+Lines 91-172 in minesweeper.py
+2. In the Research Paper I wrote 
+	a. Methods - Part B
+	b. Future Work - Part B - Paragraph 2
+	c. Related Works - A Multi_agent Approach to the Game of Go Using Genetic Algorithms
