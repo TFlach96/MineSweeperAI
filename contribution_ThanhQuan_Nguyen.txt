@@ -1,0 +1,8 @@
+ThanhQuan Nguyen
+1. Creating a game interface, class Minesweeper in minesweeper.py, and README.md PyThon part.
+Specifically lines 1-95 in runner.py and lines 1-90 in minesweeper.py
+2. In the Research Paper, I wrote:
+	- Abstract
+	- Experiment - Part B
+	- Result - Part B
+	- Future Work - Part A
