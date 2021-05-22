@@ -1,0 +1,7 @@
+Timothy Flach
+Contributions
+1. Created the 8x8 8 mines minesweeper board. 
+2. Implemented the clear adjacent tiles functionality.
+3. Modified the game board to display 0 with no adjacent mines for readibility.
+4. Assisted with creating the lisp AI code.
+5. Wrote the Lisp sections under the Methods and Experiments headings.
