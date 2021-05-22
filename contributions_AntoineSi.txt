@@ -1,0 +1,4 @@
+Antoine Si's contributions
+
+Wrote some of the (now defunct) DFSAI code, wrote some global variables and made the outofBounds function.
+For the research paper, did the conclusion and results part of the LISP Minesweeper. Added references as well.
